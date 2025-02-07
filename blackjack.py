@@ -91,8 +91,11 @@ def Game():
         gambleAmt = -1
         while gambleAmt > playerWealth or gambleAmt <= 0:
             print(f"You have: ${round(playerWealth, 1)}")
-            gambleAmt = float(input("Enter The Amount Of Money You Would Like To Gamble: $"))
-            if gambleAmt > playerWealth or gambleAmt <= 0:
+            try:
+                gambleAmt = float(input("Enter The Amount Of Money You Would Like To Gamble: $"))
+                if gambleAmt > playerWealth or gambleAmt <= 0:
+                    print("Invalid Input, Please Try Again.")
+            except:
                 print("Invalid Input, Please Try Again.")
 
         playerFiveDragons = False
@@ -134,6 +137,9 @@ def Game():
                         print("Five Dragons! x3")
                         playerFiveDragons = True
                         end = True
+                        if GetAbsoluteCardSum(playercards) == 21:
+                            multiplier *= 2
+                            print("Blackjack! x2")
                 case _:
                     print("Invalid Input, Please Try Again.")
 
@@ -182,7 +188,7 @@ def Game():
 
         if dealerSum > 21 and playerSum > 21:
             print("Both Busted. Wealth Change: -$0")
-        elif dealerSum == playerSum or (playerFiveDragons and dealerFiveDragons) or (playerTwoAces and dealerTwoAces):
+        elif (dealerSum == playerSum and not playerFiveDragons and not dealerFiveDragons and not playerTwoAces and not dealerTwoAces) or (playerFiveDragons and dealerFiveDragons) or (playerTwoAces and dealerTwoAces):
             print("Same Points. Wealth Change: -$0")
         elif (dealerSum < playerSum and not dealerFiveDragons and not dealerTwoAces and playerSum <= 21) or playerFiveDragons or playerTwoAces or dealerSum > 21:
             print(f"You Win! Wealth Change: +${round(gambleAmt * multiplier, 1)}")
